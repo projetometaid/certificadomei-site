@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.certificadodigitalmei.com.br/sitemap.xml
+
+# Bloquear arquivos desnecessários para SEO
+Disallow: /assets/js/
+Disallow: /terraform/
+Disallow: /md_google/
+Disallow: /*.css$
+Disallow: /*.js$
+
+# Permitir recursos importantes
+Allow: /assets/images/
+Allow: /assets/favicons/
+Allow: /assets/logos/
+
+# Crawl-delay para ser gentil com o servidor
+Crawl-delay: 1
