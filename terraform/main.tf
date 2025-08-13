@@ -154,11 +154,110 @@ resource "aws_cloudfront_origin_access_control" "website" {
   signing_protocol                  = "sigv4"
 }
 
+# Cache Policy otimizada para performance
+resource "aws_cloudfront_cache_policy" "optimized_caching" {
+  name        = "${var.project_name}-${var.environment}-optimized-cache"
+  comment     = "Optimized caching policy for fast response times"
+  default_ttl = 300    # 5 minutos
+  max_ttl     = 86400  # 24 horas
+  min_ttl     = 0
+
+  parameters_in_cache_key_and_forwarded_to_origin {
+    enable_accept_encoding_brotli = true
+    enable_accept_encoding_gzip   = true
+
+    query_strings_config {
+      query_string_behavior = "none"
+    }
+
+    headers_config {
+      header_behavior = "whitelist"
+      headers {
+        items = ["CloudFront-Viewer-Country", "CloudFront-Is-Mobile-Viewer"]
+      }
+    }
+
+    cookies_config {
+      cookie_behavior = "none"
+    }
+  }
+}
+
+# Cache Policy para assets estáticos (longo prazo)
+resource "aws_cloudfront_cache_policy" "static_assets_cache" {
+  name        = "${var.project_name}-${var.environment}-static-assets-cache"
+  comment     = "Long-term caching for static assets"
+  default_ttl = 31536000  # 1 ano
+  max_ttl     = 31536000  # 1 ano
+  min_ttl     = 0
+
+  parameters_in_cache_key_and_forwarded_to_origin {
+    enable_accept_encoding_brotli = true
+    enable_accept_encoding_gzip   = true
+
+    query_strings_config {
+      query_string_behavior = "none"
+    }
+
+    headers_config {
+      header_behavior = "whitelist"
+      headers {
+        items = ["Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"]
+      }
+    }
+
+    cookies_config {
+      cookie_behavior = "none"
+    }
+  }
+}
+
+# Response Headers Policy para otimizar performance
+resource "aws_cloudfront_response_headers_policy" "performance_headers" {
+  name    = "${var.project_name}-${var.environment}-performance-headers"
+  comment = "Performance optimized headers"
+
+  custom_headers_config {
+    items {
+      header   = "X-Performance-Optimized"
+      value    = "true"
+      override = false
+    }
+  }
+
+  # Headers de segurança que também ajudam na performance
+  security_headers_config {
+    strict_transport_security {
+      access_control_max_age_sec = 31536000
+      include_subdomains         = true
+      override                   = false
+    }
+
+    content_type_options {
+      override = false
+    }
+
+    frame_options {
+      frame_option = "DENY"
+      override     = false
+    }
+
+    referrer_policy {
+      referrer_policy = "strict-origin-when-cross-origin"
+      override        = false
+    }
+  }
+}
+
 resource "aws_cloudfront_distribution" "website" {
   origin {
     domain_name              = aws_s3_bucket.website.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.website.id
     origin_id                = "S3-${aws_s3_bucket.website.bucket}"
+
+    # Configurações de conexão otimizadas para S3
+    connection_attempts = 3
+    connection_timeout  = 10
   }
 
   enabled             = true
@@ -174,40 +273,33 @@ resource "aws_cloudfront_distribution" "website" {
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "S3-${aws_s3_bucket.website.bucket}"
 
-    forwarded_values {
-      query_string = false
-      cookies {
-        forward = "none"
-      }
-    }
-
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
     compress               = true
+
+    # Usar policies otimizadas em vez de forwarded_values (deprecated)
+    cache_policy_id          = aws_cloudfront_cache_policy.optimized_caching.id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.performance_headers.id
+
+    # Otimizações de performance
+    smooth_streaming = false
+    trusted_signers  = []
   }
 
-  # Cache behavior para assets estáticos
+  # Cache behavior para assets estáticos (otimizado)
   ordered_cache_behavior {
     path_pattern     = "/assets/*"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
     target_origin_id = "S3-${aws_s3_bucket.website.bucket}"
 
-    forwarded_values {
-      query_string = false
-      headers      = ["Origin"]
-      cookies {
-        forward = "none"
-      }
-    }
-
-    min_ttl                = 0
-    default_ttl            = 31536000  # 1 ano
-    max_ttl                = 31536000  # 1 ano
-    compress               = true
     viewer_protocol_policy = "redirect-to-https"
+    compress               = true
+
+    # Usar cache policy otimizada para assets
+    cache_policy_id = aws_cloudfront_cache_policy.static_assets_cache.id
+
+    # Headers de performance para assets
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.performance_headers.id
   }
 
   price_class = var.cloudfront_price_class
