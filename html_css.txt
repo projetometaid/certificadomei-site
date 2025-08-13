@@ -1,0 +1,785 @@
+Briefing obrigatório para gerar index.html + style.css ultra responsivos (mobile-first)
+0) Regras gerais (não ignore)
+Gere apenas dois arquivos: index.html e style.css (sem frameworks, sem build).
+
+Mobile-first real: comece pelos menores viewports e progressivamente melhore com media queries.
+
+Performance e Core Web Vitals: LCP ≤ 2.5s, CLS ≤ 0.02, TBT baixo, uso criterioso de fontes/imagens.
+
+Acessibilidade AA: semântica HTML5, roles/aria, contraste, foco visível, navegação por teclado.
+
+Zero overflow horizontal e nada de valores mágicos para larguras: use %, fr, minmax(), clamp().
+
+1) Layout: container, grades e hero
+Crie a classe .container e use exatamente:
+
+max-width: min(100% - clamp(24px, 5vw, 64px), 1280px);
+
+margin-inline: auto;
+
+Grades (cards de benefícios, KPIs, reviews, etc.)
+
+Use CSS Grid com: grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+gap: clamp(12px, 2.5vw, 24px);
+
+Sem widths fixas nos cards.
+
+Hero (banner inicial)
+
+Mobile: uma coluna (texto acima, mídia/ilustração abaixo).
+
+≥ 980px: grid de 2 colunas.
+
+≥ 1280px: texto 1.2fr e imagem 0.8fr.
+
+Respeite respiro lateral do .container.
+
+Headline curta; subtítulo com no máx. 2–3 linhas no mobile.
+
+2) Tipografia e espaçamento (escala fluida)
+Base do body: font-size: clamp(1rem, .3vw + .9rem, 1.125rem);
+
+h1: clamp(2rem, 2.2vw + 1rem, 3.2rem);
+
+h2: clamp(1.5rem, 1.6vw + .8rem, 2.2rem);
+
+line-height confortável (1.4–1.6).
+
+Sections: padding-block: clamp(32px, 6vw, 72px);
+
+Botões/targets: altura mínima 44px.
+
+3) Breakpoints e container queries
+Implemente ambos:
+
+Media queries: 640px, 980px, 1280px, 1440px.
+
+Adote container queries quando houver componentes em colunas:
+
+No wrapper do componente: container-type: inline-size;
+
+Ajustes internos com @container (min-width: 720px) { ... }.
+
+4) Imagens e CLS (estabilidade de layout)
+Sempre informe width e height nos <img> (ou aspect-ratio no CSS) para evitar CLS.
+
+Imagens abaixo da dobra: loading="lazy" e decoding="async".
+
+Hero: fetchpriority="high".
+
+Use <picture> com AVIF → WebP → JPEG de fallback + srcset/sizes.
+
+Ícones preferencialmente em SVG inline (cor herdada via currentColor).
+
+Não use imagens base64 grandes no CSS.
+
+5) Navegação, CTAs e cabeçalho
+Header sticky com efeito shrink ao rolar, sem causar CLS (não altere a altura do conteúdo).
+
+Menu mobile acessível (botão com aria-controls, aria-expanded, foco visível).
+
+Barra de ação fixa no mobile (CTA primário + WhatsApp), sem cobrir conteúdo (reserve espaço).
+
+Estados de hover/focus/active para links e botões.
+
+6) Acessibilidade e UX
+Estrutura semântica: header, nav, main, section, article, footer.
+
+aria-label/role onde necessário; labels claros; ordem lógica de tabulação.
+
+prefers-reduced-motion: reduza animações/transições se o usuário pedir.
+
+Contraste AA mínimo (use as cores definidas abaixo).
+
+Conteúdo legível e clicável (não use fontes minúsculas).
+
+7) Paleta e design tokens (use variáveis CSS)
+Declare no :root e use as variáveis, não hex direto:
+
+css
+Copiar
+Editar
+:root{
+  --bg:#f5f7fb;
+  --surface:#ffffff;
+  --soft:#eef2f7;
+  --border:#e6ebf2;
+
+  --text:#0f172a;
+  --muted:#64748b;
+
+  /* Primário (botões/links) */
+  --brand:#1F6FFF;
+  --brand-2:#0B57D0;
+
+  /* WhatsApp */
+  --wpp-1:#25D366;
+  --wpp-2:#128C7E;
+
+  /* Roxos (ribbon/ícones) */
+  --violet-1:#2B1A6A;
+  --violet-2:#4A1DB1;
+  --icon-1:#7C4DFF;
+  --icon-2:#6D38EA;
+
+  --shadow:0 10px 30px rgba(15,23,42,.08);
+  --r:16px;
+  --r-lg:22px;
+  --max:1280px;
+}
+Botões
+
+Primário: gradiente --brand → --brand-2, texto branco, raio 28px, sombra suave.
+
+Secundário (ghost): fundo branco, borda --border, texto --text.
+
+WhatsApp: gradiente --wpp-1 → --wpp-2.
+
+8) HTML head e SEO técnico
+Charset/viewport, title e meta description descritivos.
+
+Canonical.
+
+Open Graph básicos (og:type/site_name/title/description/url/image).
+
+preconnect/dns-prefetch para domínios externos que for usar.
+
+Use fontes do sistema (evita FOUT/FOIT). Se carregar webfont, faça com font-display: swap; e preload apenas se necessário.
+
+9) Estrutura de pastas sugerida (comentada no HTML)
+mathematica
+Copiar
+Editar
+/ (raiz)
+├─ index.html
+├─ style.css
+└─ assets/
+   ├─ img/           (webp/avif/jpg/png)
+   ├─ svg/           (ícones independentes)
+   ├─ og/            (imagens para Open Graph)
+   └─ favicons/      (favicon.svg, site.webmanifest, etc)
+Nomeie arquivos em kebab-case, sem acentos, descritivos.
+
+10) Boas práticas de código
+Sem CSS inline (exceto critical mínimo se fizer sentido).
+
+Use variáveis CSS para cores, espaçamentos e sombras.
+
+Sem !important desnecessário.
+
+Evite position: absolute para layout principal.
+
+Transições curtas (150–250ms) e discretas.
+
+Nada de libs JS — use só o mínimo para menu, shrink do header e barra fixa mobile.
+
+11) Requisitos de acessibilidade nos componentes
+Accordion/FAQ: use <details><summary>…</summary></details> nativo.
+
+Cards: título com <h3>, listas como <ul>/<li> (sem spans fingindo lista).
+
+Links externos: rel="noopener" e, se apropriado, aria-label contextual.
+
+12) Critérios de aceite (checklist)
+Sem barra de rolagem horizontal em 320px–1920px.
+
+Hero troca de 1 → 2 colunas em 980px e reequilibra 1.2fr/0.8fr em 1280px.
+
+Grades realmente usam repeat(auto-fit, minmax(280px, 1fr)).
+
+Tipografia usa os clamp() definidos.
+
+Todas as imagens com width/height (ou aspect-ratio).
+
+Lighthouse: Acessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 95.
+
+CWV simulados: CLS ≤ 0.02; não há saltos visuais em header/hero.
+
+13) Comportamentos específicos a implementar
+Header shrink: adiciona classe quando scrollY > 24 (apenas sombra/blur/scale leve no logo; não mude a altura).
+
+Menu mobile: botão toggla aria-expanded; nav entra por transform/opacity; trava só o scroll do body se necessário.
+
+Action bar mobile: fixed bottom; somar padding-bottom no main para não cobrir conteúdo.
+
+Links de CTA: foco com outline visível; cursor pointer; estados de hover/focus distintos.
+
+14) Declarações CSS base (obrigatórias)
+Inclua (ou equivalente) no começo do style.css:
+
+css
+Copiar
+Editar
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial;
+  background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+img{max-width:100%; display:block; height:auto}
+a{text-decoration:none; color:var(--brand-2)}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--brand); outline-offset:3px}
+.container{max-width:min(100% - clamp(24px, 5vw, 64px), var(--max)); margin-inline:auto}
+section{padding-block:clamp(32px, 6vw, 72px)}
+15) Conteúdo mínimo esperado
+Header com marca (SVG), nav, CTA “WhatsApp”.
+
+Hero com título, subtítulo, 2 CTAs (Comprar / WhatsApp) e área da imagem (placeholder).
+
+“Como funciona” em 3 passos (cards).
+
+Faixa “Google Reviews” com estrelas e contagem.
+
+KPIs em 3 cards.
+
+Seção “Benefícios” com pelo menos 5 cards (grid).
+
+Seção de reviews (3 cards).
+
+FAQ com <details>.
+
+CTA final.
+
+Footer com colunas de links (sem colapsar contraste).
+
+16) Implemente as media queries
+Use exatamente estes blocos (pode adicionar outros, mas não substitua):
+
+css
+Copiar
+Editar
+@media (min-width: 640px){ /* ajustes para phones grandes/pequenos tablets */ }
+@media (min-width: 980px){ /* duas colunas no hero, grades mais densas, header refinado */ }
+@media (min-width: 1280px){ /* hero 1.2fr/0.8fr, max-width confortável, tipografia ligeiramente maior */ }
+@media (min-width: 1440px){ /* refinamentos em telas muito largas (sem alongar demais linhas) */ }
+17) Exigências de qualidade de imagem
+Hero: use <picture> com fetchpriority="high"; versões AVIF/WebP + JPEG fallback; sizes condizente.
+
+Todos os <img> com alt descritivo (ou alt="" se decorativo + aria-hidden="true").
+
+Nunca carregue imagens gigantes quando o slot é pequeno (use srcset realista).
+
+18) JavaScript mínimo (inline no HTML)
+Atualizar ano no footer.
+
+Toggle do menu (aria).
+
+Cabeçalho shrink.
+
+Sem bibliotecas externas.
+
+19) O que não fazer
+Não usar largura fixa em px para cards/containers.
+
+Não usar imagens sem dimensões.
+
+Não bloquear renderização com fontes pesadas.
+
+Não abusar de sombras e animações.
+
+Não esconder outline de foco.
+
+Entregáveis: index.html e style.css com comentários curtos explicando escolhas, prontos para colar.
+Objetivo: site extremamente responsivo (celular → desktop ultralargo), rápido, acessível e estável, respeitando todas as regras acima.
+
+Briefing obrigatório para gerar index.html + style.css ultra responsivos (mobile-first)
+0) Regras gerais (não ignore)
+Gere apenas dois arquivos: index.html e style.css (sem frameworks, sem build).
+
+Mobile-first real: comece pelos menores viewports e progressivamente melhore com media queries.
+
+Performance e Core Web Vitals: LCP ≤ 2.5s, CLS ≤ 0.02, TBT baixo, uso criterioso de fontes/imagens.
+
+Acessibilidade AA: semântica HTML5, roles/aria, contraste, foco visível, navegação por teclado.
+
+Zero overflow horizontal e nada de valores mágicos para larguras: use %, fr, minmax(), clamp().
+
+1) Layout: container, grades e hero
+Crie a classe .container e use exatamente:
+
+max-width: min(100% - clamp(24px, 5vw, 64px), 1280px);
+
+margin-inline: auto;
+
+Grades (cards de benefícios, KPIs, reviews, etc.)
+
+Use CSS Grid com: grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+gap: clamp(12px, 2.5vw, 24px);
+
+Sem widths fixas nos cards.
+
+Hero (banner inicial)
+
+Mobile: uma coluna (texto acima, mídia/ilustração abaixo).
+
+≥ 980px: grid de 2 colunas.
+
+≥ 1280px: texto 1.2fr e imagem 0.8fr.
+
+Respeite respiro lateral do .container.
+
+Headline curta; subtítulo com no máx. 2–3 linhas no mobile.
+
+2) Tipografia e espaçamento (escala fluida)
+Base do body: font-size: clamp(1rem, .3vw + .9rem, 1.125rem);
+
+h1: clamp(2rem, 2.2vw + 1rem, 3.2rem);
+
+h2: clamp(1.5rem, 1.6vw + .8rem, 2.2rem);
+
+line-height confortável (1.4–1.6).
+
+Sections: padding-block: clamp(32px, 6vw, 72px);
+
+Botões/targets: altura mínima 44px.
+
+3) Breakpoints e container queries
+Implemente ambos:
+
+Media queries: 640px, 980px, 1280px, 1440px.
+
+Adote container queries quando houver componentes em colunas:
+
+No wrapper do componente: container-type: inline-size;
+
+Ajustes internos com @container (min-width: 720px) { ... }.
+
+4) Imagens e CLS (estabilidade de layout)
+Sempre informe width e height nos <img> (ou aspect-ratio no CSS) para evitar CLS.
+
+Imagens abaixo da dobra: loading="lazy" e decoding="async".
+
+Hero: fetchpriority="high".
+
+Use <picture> com AVIF → WebP → JPEG de fallback + srcset/sizes.
+
+Ícones preferencialmente em SVG inline (cor herdada via currentColor).
+
+Não use imagens base64 grandes no CSS.
+
+5) Navegação, CTAs e cabeçalho
+Header sticky com efeito shrink ao rolar, sem causar CLS (não altere a altura do conteúdo).
+
+Menu mobile acessível (botão com aria-controls, aria-expanded, foco visível).
+
+Barra de ação fixa no mobile (CTA primário + WhatsApp), sem cobrir conteúdo (reserve espaço).
+
+Estados de hover/focus/active para links e botões.
+
+6) Acessibilidade e UX
+Estrutura semântica: header, nav, main, section, article, footer.
+
+aria-label/role onde necessário; labels claros; ordem lógica de tabulação.
+
+prefers-reduced-motion: reduza animações/transições se o usuário pedir.
+
+Contraste AA mínimo (use as cores definidas abaixo).
+
+Conteúdo legível e clicável (não use fontes minúsculas).
+
+7) Paleta e design tokens (use variáveis CSS)
+Declare no :root e use as variáveis, não hex direto:
+
+css
+Copiar
+Editar
+:root{
+  --bg:#f5f7fb;
+  --surface:#ffffff;
+  --soft:#eef2f7;
+  --border:#e6ebf2;
+
+  --text:#0f172a;
+  --muted:#64748b;
+
+  /* Primário (botões/links) */
+  --brand:#1F6FFF;
+  --brand-2:#0B57D0;
+
+  /* WhatsApp */
+  --wpp-1:#25D366;
+  --wpp-2:#128C7E;
+
+  /* Roxos (ribbon/ícones) */
+  --violet-1:#2B1A6A;
+  --violet-2:#4A1DB1;
+  --icon-1:#7C4DFF;
+  --icon-2:#6D38EA;
+
+  --shadow:0 10px 30px rgba(15,23,42,.08);
+  --r:16px;
+  --r-lg:22px;
+  --max:1280px;
+}
+Botões
+
+Primário: gradiente --brand → --brand-2, texto branco, raio 28px, sombra suave.
+
+Secundário (ghost): fundo branco, borda --border, texto --text.
+
+WhatsApp: gradiente --wpp-1 → --wpp-2.
+
+8) HTML head e SEO técnico
+Charset/viewport, title e meta description descritivos.
+
+Canonical.
+
+Open Graph básicos (og:type/site_name/title/description/url/image).
+
+preconnect/dns-prefetch para domínios externos que for usar.
+
+Use fontes do sistema (evita FOUT/FOIT). Se carregar webfont, faça com font-display: swap; e preload apenas se necessário.
+
+9) Estrutura de pastas sugerida (comentada no HTML)
+mathematica
+Copiar
+Editar
+/ (raiz)
+├─ index.html
+├─ style.css
+└─ assets/
+   ├─ img/           (webp/avif/jpg/png)
+   ├─ svg/           (ícones independentes)
+   ├─ og/            (imagens para Open Graph)
+   └─ favicons/      (favicon.svg, site.webmanifest, etc)
+Nomeie arquivos em kebab-case, sem acentos, descritivos.
+
+10) Boas práticas de código
+Sem CSS inline (exceto critical mínimo se fizer sentido).
+
+Use variáveis CSS para cores, espaçamentos e sombras.
+
+Sem !important desnecessário.
+
+Evite position: absolute para layout principal.
+
+Transições curtas (150–250ms) e discretas.
+
+Nada de libs JS — use só o mínimo para menu, shrink do header e barra fixa mobile.
+
+11) Requisitos de acessibilidade nos componentes
+Accordion/FAQ: use <details><summary>…</summary></details> nativo.
+
+Cards: título com <h3>, listas como <ul>/<li> (sem spans fingindo lista).
+
+Links externos: rel="noopener" e, se apropriado, aria-label contextual.
+
+12) Critérios de aceite (checklist)
+Sem barra de rolagem horizontal em 320px–1920px.
+
+Hero troca de 1 → 2 colunas em 980px e reequilibra 1.2fr/0.8fr em 1280px.
+
+Grades realmente usam repeat(auto-fit, minmax(280px, 1fr)).
+
+Tipografia usa os clamp() definidos.
+
+Todas as imagens com width/height (ou aspect-ratio).
+
+Lighthouse: Acessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 95.
+
+CWV simulados: CLS ≤ 0.02; não há saltos visuais em header/hero.
+
+13) Comportamentos específicos a implementar
+Header shrink: adiciona classe quando scrollY > 24 (apenas sombra/blur/scale leve no logo; não mude a altura).
+
+Menu mobile: botão toggla aria-expanded; nav entra por transform/opacity; trava só o scroll do body se necessário.
+
+Action bar mobile: fixed bottom; somar padding-bottom no main para não cobrir conteúdo.
+
+Links de CTA: foco com outline visível; cursor pointer; estados de hover/focus distintos.
+
+14) Declarações CSS base (obrigatórias)
+Inclua (ou equivalente) no começo do style.css:
+
+css
+Copiar
+Editar
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial;
+  background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+img{max-width:100%; display:block; height:auto}
+a{text-decoration:none; color:var(--brand-2)}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--brand); outline-offset:3px}
+.container{max-width:min(100% - clamp(24px, 5vw, 64px), var(--max)); margin-inline:auto}
+section{padding-block:clamp(32px, 6vw, 72px)}
+15) Conteúdo mínimo esperado
+Header com marca (SVG), nav, CTA “WhatsApp”.
+
+Hero com título, subtítulo, 2 CTAs (Comprar / WhatsApp) e área da imagem (placeholder).
+
+“Como funciona” em 3 passos (cards).
+
+Faixa “Google Reviews” com estrelas e contagem.
+
+KPIs em 3 cards.
+
+Seção “Benefícios” com pelo menos 5 cards (grid).
+
+Seção de reviews (3 cards).
+
+FAQ com <details>.
+
+CTA final.
+
+Footer com colunas de links (sem colapsar contraste).
+
+16) Implemente as media queries
+Use exatamente estes blocos (pode adicionar outros, mas não substitua):
+
+css
+Copiar
+Editar
+@media (min-width: 640px){ /* ajustes para phones grandes/pequenos tablets */ }
+@media (min-width: 980px){ /* duas colunas no hero, grades mais densas, header refinado */ }
+@media (min-width: 1280px){ /* hero 1.2fr/0.8fr, max-width confortável, tipografia ligeiramente maior */ }
+@media (min-width: 1440px){ /* refinamentos em telas muito largas (sem alongar demais linhas) */ }
+17) Exigências de qualidade de imagem
+Hero: use <picture> com fetchpriority="high"; versões AVIF/WebP + JPEG fallback; sizes condizente.
+
+Todos os <img> com alt descritivo (ou alt="" se decorativo + aria-hidden="true").
+
+Nunca carregue imagens gigantes quando o slot é pequeno (use srcset realista).
+
+18) JavaScript mínimo (inline no HTML)
+Atualizar ano no footer.
+
+Toggle do menu (aria).
+
+Cabeçalho shrink.
+
+Sem bibliotecas externas.
+
+19) O que não fazer
+Não usar largura fixa em px para cards/containers.
+
+Não usar imagens sem dimensões.
+
+Não bloquear renderização com fontes pesadas.
+
+Não abusar de sombras e animações.
+
+Não esconder outline de foco.
+
+
+Padrão de Engenharia: Páginas de Aterrissagem de Alta Performance v2.0
+Diretiva Principal: Construir uma experiência web que seja percebida pelo usuário como instantânea, intuitiva e valiosa. O código deve ser um reflexo direto da qualidade e autoridade do conteúdo, otimizado para a máxima performance de renderização e total compreensibilidade pelos sistemas do Google (Search, Discover).
+
+Princípios Fundamentais (Os "Porquês")
+Arquitetura Orientada à Performance (Performance-First Architecture): Cada byte e cada milissegundo contam. A performance não é uma otimização, é a base do design. A meta é eliminar qualquer recurso que bloqueie a renderização do conteúdo principal.
+
+Layout Fluido e Intrinsicamente Responsivo: A interface não "reage" a breakpoints; ela flui naturalmente em qualquer viewport. Usamos algoritmos de layout (Flexbox, Grid) e unidades fluidas para que os breakpoints sirvam apenas para refinar, não para consertar.
+
+Semântica e Acessibilidade por Padrão (Semantic & Accessible by Default): Um HTML bem estruturado e semântico é a base do SEO técnico e da acessibilidade. A estrutura do documento deve ser um mapa claro do conteúdo. Acessibilidade não é um anexo, é um requisito de engenharia.
+
+Integração Nativa com o Grafo de Conhecimento (Knowledge Graph Native): A página não é apenas texto e imagens; é um nó em um grafo de dados. O Schema.org (JSON-LD) é um cidadão de primeira classe da arquitetura, injetado no <head> para descrever inequivocamente as entidades, seus atributos e relações.
+
+Especificações Técnicas Mandatórias
+1. Estrutura e Arquivo index.html
+O index.html é o esqueleto da aplicação. Sua estrutura deve ser imutável e otimizada para o parse mais rápido possível pelo navegador.
+
+HTML
+
+<!DOCTYPE html>
+<html lang="{page_language_code}" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{seo_title}</title>
+    <meta name="description" content="{seo_description}">
+    <link rel="canonical" href="{canonical_url}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{site_name}">
+    <meta property="og:url" content="{canonical_url}">
+    <meta property="og:title" content="{og_title}">
+    <meta property="og:description" content="{og_description}">
+    <meta property="og:image" content="{og_image_url}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <link rel="icon" href="/assets/favicons/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/favicons/apple-touch-icon.png">
+    <link rel="manifest" href="/assets/favicons/site.webmanifest">
+
+    <style>
+      /* CSS CRÍTICO SERÁ INJETADO AQUI PELO SISTEMA */
+      /* Contém apenas o CSS necessário para renderizar o conteúdo "acima da dobra" */
+    </style>
+    <link rel="stylesheet" href="/style.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/style.css"></noscript>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        // O JSON-LD COMPLETO DA ENTIDADE SERÁ INJETADO AQUI
+        // Ex: @type: "City", "LocalBusiness", etc.
+        "@type": "{schema_type}",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "{canonical_url}"
+        },
+        "name": "{entity_name}"
+        // ... outros atributos dinâmicos do KG
+      }
+    </script>
+</head>
+<body data-page-id="{page_unique_id}">
+    
+    <script>
+      // JavaScript mínimo e encapsulado (ver seção 6)
+    </script>
+</body>
+</html>
+2. Design Tokens e CSS (style.css)
+O CSS será construído sobre um sistema de Design Tokens declarados no :root. Isso garante consistência e manutenibilidade. A nomenclatura deve ser semântica e previsível.
+
+CSS
+
+/* /style.css */
+:root {
+  /* 1. Paleta de Cores Semântica */
+  --color-background: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-surface-soft: #eef2f7;
+  --color-border: #e6ebf2;
+
+  --color-text-primary: #0f172a;
+  --color-text-muted: #64748b;
+
+  --color-brand-primary: #1F6FFF;
+  --color-brand-secondary: #0B57D0;
+  --color-brand-gradient: linear-gradient(90deg, var(--color-brand-primary), var(--color-brand-secondary));
+
+  --color-wpp-primary: #25D366;
+  --color-wpp-secondary: #128C7E;
+  --color-wpp-gradient: linear-gradient(90deg, var(--color-wpp-primary), var(--color-wpp-secondary));
+  
+  /* ... outras cores */
+
+  /* 2. Tipografia Fluida (Escala Modular) */
+  --font-family-base: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif;
+  --font-size-base: clamp(1rem, 0.3vw + 0.9rem, 1.125rem); /* ~16px a 18px */
+  --font-size-h1:   clamp(2rem, 2.2vw + 1rem, 3.2rem);
+  --font-size-h2:   clamp(1.5rem, 1.6vw + 0.8rem, 2.2rem);
+  --line-height-base: 1.6;
+
+  /* 3. Espaçamento e Ritmo Vertical */
+  --spacing-inline: clamp(1.5rem, 5vw, 4rem);           /* 24px a 64px */
+  --spacing-block:  clamp(2rem, 6vw, 4.5rem);          /* 32px a 72px */
+  --spacing-grid-gap: clamp(0.75rem, 2.5vw, 1.5rem);   /* 12px a 24px */
+
+  /* 4. Geometria e Efeitos */
+  --border-radius-medium: 16px;
+  --border-radius-large: 22px;
+  --border-radius-pill: 28px;
+  --shadow-default: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --layout-max-width: 1280px;
+  --transition-speed: 200ms;
+}
+
+/* Reset e Padrões Globais */
+*, *::before, *::after { box-sizing: border-box; }
+html { font-family: var(--font-family-base); font-size: var(--font-size-base); line-height: var(--line-height-base); scroll-behavior: smooth; }
+body { margin: 0; background-color: var(--color-background); color: var(--color-text-primary); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: clip; }
+img, svg, video { max-width: 100%; display: block; height: auto; }
+:focus-visible { outline: 2px solid var(--color-brand-primary); outline-offset: 3px; border-radius: 4px; }
+3. Layout, Componentes e Contratos
+Container Principal (.container)
+
+Contrato: max-width: var(--layout-max-width); margin-inline: auto; padding-inline: var(--spacing-inline);
+
+Propósito: Centraliza o conteúdo, garantindo margens de respiro fluidas.
+
+Grade Responsiva (.grid-autofit)
+
+Contrato: display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--spacing-grid-gap);
+
+Propósito: O padrão-ouro para layouts de cards. É auto-suficiente e se adapta a qualquer espaço disponível.
+
+Seções (<section>)
+
+Contrato: padding-block: var(--spacing-block); Deve conter um <h2> como primeiro filho para hierarquia de documento.
+
+Componente Hero (.hero)
+
+Contrato HTML: <section class="hero"><div class="container">...</div></section>
+
+Contrato de Layout: display: grid; grid-template-columns: 1fr;
+
+Breakpoint (min-width: 980px): grid-template-columns: 1.2fr 0.8fr; align-items: center; (ou conforme a necessidade).
+
+4. Performance de Renderização e Core Web Vitals
+Imagens (Mandato CLS Zero):
+
+Toda tag <img> deve ter os atributos width e height explícitos e correspondentes à dimensão da imagem fonte.
+
+Use o componente <picture> para otimização de formato e densidade.
+
+Imagem do Hero (LCP): fetchpriority="high", loading="eager".
+
+Imagens Abaixo da Dobra: loading="lazy", decoding="async".
+
+HTML
+
+<picture>
+  <source srcset="/path/to/image.avif" type="image/avif">
+  <source srcset="/path/to/image.webp" type="image/webp">
+  <img src="/path/to/image.jpg" 
+       alt="{descriptive_alt_text}" 
+       width="800" height="600" 
+       fetchpriority="high" 
+       loading="eager">
+</picture>
+Fontes Web: Carregar com font-display: swap; via CSS. Fazer preload no HTML apenas para a fonte principal usada no LCP, se estritamente necessário.
+
+5. JavaScript Mínimo e Não-Bloqueador
+Todo JavaScript deve ser encapsulado e executado de forma assíncrona para não impactar o INP (Interaction to Next Paint).
+
+HTML
+
+<script>
+  (function() {
+    'use strict';
+    // 1. Menu Mobile Toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    if (menuToggle && mobileNav) {
+      menuToggle.addEventListener('click', () => {
+        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', !isExpanded);
+        mobileNav.hidden = isExpanded;
+        // Opcional: Travar scroll do body
+        document.body.style.overflow = isExpanded ? '' : 'hidden';
+      });
+    }
+
+    // 2. Header Shrink on Scroll
+    const header = document.querySelector('.site-header');
+    if(header) {
+      window.addEventListener('scroll', () => {
+        header.classList.toggle('is-scrolled', window.scrollY > 20);
+      }, { passive: true }); // Otimização de performance
+    }
+  })();
+</script>
+6. Critérios de Aceitação e Validação (QA Mandates)
+Lighthouse Score: Acessibilidade, Melhores Práticas e SEO ≥ 98. Performance ≥ 95 (objetivo 100 com CSS Crítico).
+
+Core Web Vitals: CLS ≤ 0.01. LCP ≤ 2.0s. INP ≤ 200ms (em dados de campo).
+
+Validação: O HTML deve passar na validação do W3C. O JSON-LD deve ser validado no Rich Results Test.
+
+Teste de Viewport: Nenhuma barra de rolagem horizontal em viewports de 320px a 2560px.
+
+Acessibilidade: Navegação completa via teclado funcional, com estados de foco visíveis e lógicos.
