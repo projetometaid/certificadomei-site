@@ -1,0 +1,62 @@
+# ===== TERRAFORM VARIABLES - CERTIFICADO MEI =====
+# Copie este arquivo para terraform.tfvars e ajuste os valores
+
+# ===== CONFIGURAÇÕES BÁSICAS =====
+aws_region   = "us-east-1"  # Região AWS (us-east-1 recomendado para CloudFront)
+environment  = "prod"       # dev, staging ou prod
+project_name = "certificadomei"
+
+# ===== DOMÍNIO CUSTOMIZADO (OPCIONAL) =====
+# Deixe vazio ("") para usar apenas CloudFront domain
+# Se especificar, certifique-se de ter acesso ao DNS do domínio
+domain_name = ""  # Ex: "certificadodigitalmei.com.br"
+
+# ===== CLOUDFRONT CONFIGURAÇÕES =====
+cloudfront_price_class = "PriceClass_100"  # PriceClass_100 (US/CA/EU), PriceClass_200 (+ Asia), PriceClass_All (Global)
+
+# ===== MONITORAMENTO E SEGURANÇA =====
+enable_monitoring  = true   # CloudWatch monitoring
+enable_waf        = false   # AWS WAF (gera custos extras)
+enable_access_logs = true   # Logs de acesso CloudFront
+
+# ===== BACKUP E RETENÇÃO =====
+backup_retention_days = 30  # Dias de retenção para versionamento S3
+
+# ===== TAGS ADICIONAIS =====
+tags = {
+  Owner       = "leandro.albertini@metaid.com.br"
+  Project     = "certificadomei-site"
+  Environment = "prod"
+  ManagedBy   = "terraform"
+  CostCenter  = "marketing"
+  Department  = "ti"
+}
+
+# ===== EXEMPLOS DE CONFIGURAÇÃO POR AMBIENTE =====
+
+# DESENVOLVIMENTO
+# aws_region   = "us-east-1"
+# environment  = "dev"
+# project_name = "certificadomei-dev"
+# domain_name  = ""
+# cloudfront_price_class = "PriceClass_100"
+# enable_monitoring = false
+# enable_waf = false
+
+# STAGING
+# aws_region   = "us-east-1"
+# environment  = "staging"
+# project_name = "certificadomei-staging"
+# domain_name  = "staging.certificadodigitalmei.com.br"
+# cloudfront_price_class = "PriceClass_100"
+# enable_monitoring = true
+# enable_waf = false
+
+# PRODUÇÃO
+# aws_region   = "us-east-1"
+# environment  = "prod"
+# project_name = "certificadomei"
+# domain_name  = "certificadodigitalmei.com.br"
+# cloudfront_price_class = "PriceClass_200"
+# enable_monitoring = true
+# enable_waf = true

@@ -198,8 +198,65 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // ========== FAQ INTERATIVA ==========
+
+  function initFAQ() {
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    if (faqItems.length === 0) {
+      console.log('FAQ não encontrada na página');
+      return;
+    }
+
+    faqItems.forEach((item) => {
+      const question = item.querySelector('.faq-question');
+      const answer = item.querySelector('.faq-answer');
+
+      if (!question || !answer) return;
+
+      question.addEventListener('click', () => {
+        const isOpen = question.getAttribute('aria-expanded') === 'true';
+
+        // Fechar todas as outras FAQs
+        faqItems.forEach((otherItem) => {
+          if (otherItem !== item) {
+            const otherQuestion = otherItem.querySelector('.faq-question');
+            const otherAnswer = otherItem.querySelector('.faq-answer');
+
+            if (otherQuestion && otherAnswer) {
+              otherQuestion.setAttribute('aria-expanded', 'false');
+              otherAnswer.classList.remove('open');
+              otherItem.classList.remove('active');
+            }
+          }
+        });
+
+        // Toggle da FAQ atual
+        if (isOpen) {
+          question.setAttribute('aria-expanded', 'false');
+          answer.classList.remove('open');
+          item.classList.remove('active');
+        } else {
+          question.setAttribute('aria-expanded', 'true');
+          answer.classList.add('open');
+          item.classList.add('active');
+        }
+      });
+
+      // Suporte para teclado
+      question.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          question.click();
+        }
+      });
+    });
+
+    console.log('✅ FAQ interativa inicializada');
+  }
+
   // ========== INICIALIZAÇÃO PRINCIPAL ==========
-  
+
   function initializeApp() {
     try {
       initDynamicYear();
@@ -209,7 +266,8 @@ document.addEventListener('DOMContentLoaded', function() {
       initSmoothScroll();
       initLazyLoading();
       initFormValidation();
-      
+      initFAQ();
+
       console.log('✅ JavaScript inicializado com sucesso');
     } catch (error) {
       console.error('❌ Erro durante a inicialização do JavaScript:', error);
