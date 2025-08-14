@@ -549,10 +549,10 @@ p {
   width: 100%;
 }
 
-/* Card com duas áreas (topo escuro + base branca) */
+/* Card com duas áreas (topo escuro + base branca) - otimizado */
 .offer-wrap{
-  width: min(720px, calc(100vw - 32px)); /* 16px margin de cada lado */
-  max-width: 720px;
+  width: min(640px, calc(100vw - 32px)); /* Reduzido de 720px para 640px */
+  max-width: 640px; /* Reduzido para melhor proporção */
   margin: 0 auto; /* Garante centralização */
   background: linear-gradient(#24263a, #24263a) top/100% auto no-repeat,
               linear-gradient(#fff, #fff) bottom/100% auto no-repeat;
@@ -561,12 +561,12 @@ p {
   overflow: hidden;
 }
 
-/* Topo (fundo escuro) */
+/* Topo (fundo escuro) - padding otimizado */
 .offer-header{
   background: var(--card-top);
   color: #fff;
   text-align: center;
-  padding: clamp(24px,6vw,48px) clamp(20px,4vw,36px);
+  padding: clamp(20px,5vw,40px) clamp(18px,3.5vw,32px); /* Reduzido para melhor proporção */
 }
 .offer-header h1{
   margin:0 0 12px;
@@ -579,10 +579,10 @@ p {
   font: 500 clamp(14px,1.6vw,18px)/1.5 "Poppins",system-ui,sans-serif;
 }
 
-/* Base branca (benefícios + preço + CTA) */
+/* Base branca (benefícios + preço + CTA) - padding otimizado */
 .offer-body{
   background: var(--card-bottom);
-  padding: clamp(20px,5vw,40px);
+  padding: clamp(18px,4.5vw,36px); /* Reduzido para melhor proporção */
 }
 
 /* Lista de benefícios com "check" */
@@ -635,22 +635,22 @@ p {
   opacity: 0.9;
 }
 
-/* CTA grande em degradê laranja */
+/* CTA otimizado em degradê laranja */
 .offer-cta{
   display:block;
-  width: min(520px, 100%);
+  width: min(460px, 100%); /* Reduzido de 520px para 460px */
   margin: 0 auto;
   text-align:center;
   text-decoration:none;
-  font: 800 clamp(16px,1.8vw,20px)/1 "Poppins",system-ui,sans-serif;
+  font: 800 clamp(15px,1.7vw,19px)/1 "Poppins",system-ui,sans-serif; /* Ligeiramente menor */
   color:#fff;
-  padding: clamp(14px,1.8vw,18px) clamp(20px,3vw,28px);
+  padding: clamp(12px,1.6vw,16px) clamp(18px,2.8vw,26px); /* Padding reduzido */
   border-radius: 999px;
   background: linear-gradient(135deg,var(--brand),var(--brand-2));
-  box-shadow: 0 18px 38px rgba(255,122,0,.25);
+  box-shadow: 0 16px 34px rgba(255,122,0,.25); /* Shadow ligeiramente menor */
   transition: transform .15s ease, box-shadow .15s ease;
 }
-.offer-cta:hover{ transform: translateY(-1px); box-shadow: 0 22px 46px rgba(255,122,0,.32); }
+.offer-cta:hover{ transform: translateY(-1px); box-shadow: 0 20px 42px rgba(255,122,0,.32); } /* Shadow ajustado */
 .offer-cta:active{ transform: translateY(0); }
 
 /* Asterisco menor */
@@ -958,12 +958,12 @@ p {
   position: relative;
 }
 
-/* Container otimizado para ocupar mais espaço visual */
+/* Container otimizado com proporções melhores */
 .pricing__container {
-  /* Mobile: margens laterais pequenas (16px) */
-  max-width: calc(100% - 32px);
+  /* Mobile: margens laterais pequenas mas proporcionais */
+  max-width: calc(100% - 24px);
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 12px;
 }
 
 /* Título da seção com tipografia fluida */
@@ -983,21 +983,21 @@ p {
   width: 100%;
 }
 
-/* Card principal otimizado */
+/* Card principal otimizado com proporções melhores */
 .pricing__card {
   background: var(--surface);
   border: 2px solid var(--border);
   border-radius: var(--radius-2xl);
-  padding: var(--space-6);
+  padding: var(--space-5); /* Reduzido de space-6 para space-5 */
   box-shadow: var(--shadow-md);
   transition: all var(--transition-base);
   width: 100%;
-  max-width: 400px; /* Mobile: largura controlada */
+  max-width: 360px; /* Reduzido de 400px para 360px no mobile */
 
   /* Flexbox para organizar elementos internos */
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3); /* Reduzido de space-4 para space-3 */
 }
 
 .pricing__card:hover {
@@ -1012,7 +1012,7 @@ p {
 }
 
 .pricing__plan-name {
-  font-size: clamp(1.25rem, 2vw + 1rem, 1.5rem);
+  font-size: clamp(1.125rem, 1.8vw + 0.9rem, 1.375rem); /* Ligeiramente menor */
   font-weight: 700;
   color: var(--text);
   margin-bottom: var(--space-1);
@@ -1020,7 +1020,7 @@ p {
 }
 
 .pricing__plan-desc {
-  font-size: clamp(0.875rem, 1.5vw + 0.8rem, 1rem);
+  font-size: clamp(0.8125rem, 1.3vw + 0.75rem, 0.9375rem); /* Ligeiramente menor */
   color: var(--muted);
   margin: 0;
   line-height: 1.4;
@@ -1681,6 +1681,17 @@ section, .card, .box {
 
 /* Tablet - 768px+ */
 @media (min-width: 768px) {
+  /* Otimizações do container de pricing para tablet */
+  .pricing__container {
+    max-width: calc(100% - 48px);
+    padding: 0 24px;
+  }
+
+  .pricing__card {
+    max-width: 420px; /* Tamanho intermediário para tablet */
+    padding: var(--space-5);
+    gap: var(--space-4);
+  }
   .container {
     max-width: var(--bp-md);
     padding-left: max(var(--space-xl), env(safe-area-inset-left));
@@ -2055,36 +2066,36 @@ section, .card, .box {
 
   /* ========== PRICING DESKTOP LARGO ========== */
 
-  /* Container ainda maior para telas grandes */
+  /* Container otimizado para telas grandes */
   .pricing__container {
-    max-width: 1000px; /* Aproveita melhor telas grandes */
-    padding: 0 var(--space-8);
+    max-width: 800px; /* Reduzido de 1000px para 800px */
+    padding: 0 var(--space-6); /* Reduzido de space-8 para space-6 */
   }
 
-  /* Card premium para telas grandes */
+  /* Card otimizado para telas grandes */
   .pricing__card {
-    max-width: 700px; /* Card ainda maior */
-    padding: var(--space-10); /* Padding generoso para transmitir valor premium */
+    max-width: 560px; /* Reduzido de 700px para 560px */
+    padding: var(--space-8); /* Reduzido de space-10 para space-8 */
   }
 
-  /* Tipografia premium para telas grandes */
+  /* Tipografia otimizada para telas grandes */
   .pricing__value {
-    font-size: clamp(3rem, 4.8vw + 1.8rem, 4rem);
+    font-size: clamp(2.75rem, 4.2vw + 1.6rem, 3.75rem); /* Ligeiramente menor */
   }
 
   /* ========== PRICING DESKTOP ========== */
 
-  /* Container maior para ocupar mais espaço visual no desktop */
+  /* Container otimizado para desktop com proporções melhores */
   .pricing__container {
-    max-width: 800px; /* Aumenta significativamente a largura máxima */
-    padding: 0 var(--space-6); /* Padding interno maior */
+    max-width: 680px; /* Reduzido de 800px para 680px */
+    padding: 0 var(--space-5); /* Reduzido de space-6 para space-5 */
   }
 
-  /* Card maior e mais destacado no desktop */
+  /* Card otimizado para desktop */
   .pricing__card {
-    max-width: 600px; /* Aumenta largura máxima do card */
-    padding: var(--space-8); /* Padding interno maior para transmitir valor */
-    gap: var(--space-6); /* Maior espaçamento entre elementos */
+    max-width: 480px; /* Reduzido de 600px para 480px */
+    padding: var(--space-6); /* Reduzido de space-8 para space-6 */
+    gap: var(--space-4); /* Reduzido de space-6 para space-4 */
   }
 
   /* Tipografia otimizada para desktop */
@@ -2093,11 +2104,11 @@ section, .card, .box {
   }
 
   .pricing__plan-name {
-    font-size: clamp(1.5rem, 2.2vw + 1rem, 1.75rem);
+    font-size: clamp(1.375rem, 2vw + 1rem, 1.625rem); /* Ligeiramente menor */
   }
 
   .pricing__value {
-    font-size: clamp(2.75rem, 4.5vw + 1.5rem, 3.5rem);
+    font-size: clamp(2.5rem, 4vw + 1.4rem, 3.25rem); /* Ligeiramente menor */
   }
 
   .pricing__features {
