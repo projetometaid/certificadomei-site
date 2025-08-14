@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Comprar Certificado Digital e-CNPJ A1 | Certificado Digital MEI</title>
   <meta name="description" content="Finalize sua compra do Certificado Digital e-CNPJ A1. Processo 100% online por videoconferência com entrega em minutos.">
@@ -35,8 +35,11 @@
   <meta name="theme-color" content="#1F6FFF">
   <meta name="theme-color" content="#0B57D0" media="(prefers-color-scheme: dark)">
 
-  <!-- CSS -->
+  <!-- CSS na ordem correta sem duplicatas -->
+  <link rel="stylesheet" href="./assets/css/normalize.css">
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./assets/css/widget-responsive.css">
 
   <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="/assets/favicons/favicon.ico">
@@ -47,399 +50,184 @@
   <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicons/android-chrome-512x512.png">
   <link rel="manifest" href="/assets/favicons/site.webmanifest">
 
-  <!-- CSS COMPLETO PARA WIDGET SEM CORTES -->
+  <!-- CSS 100% RESPONSIVO PARA AGENDA (Bootstrap 3.3.5) -->
   <style>
-    /* ========== RESET GLOBAL PARA EVITAR CORTES ========== */
-    * {
-      box-sizing: border-box;
-    }
-
-    /* ========== LAYOUT BASE SEM LIMITAÇÕES ========== */
-    body {
+    /* ========== GUARD RAILS GLOBAIS ========== */
+    html, body {
+      overflow-x: hidden !important;
       margin: 0;
       padding: 0;
       min-height: 100vh;
       background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
       font-family: "Poppins", system-ui, sans-serif;
-      overflow-x: hidden;
     }
 
-    .purchase-page {
+    * {
+      max-width: 100% !important;
+    }
+
+    /* ========== CONTAINER NÃO TRAVA LARGURA NO MOBILE ========== */
+    @media (max-width: 767px) {
+      .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+      }
+    }
+
+    /* ========== QUALQUER WRAPPER DA AGENDA NÃO PODE TER LARGURA EM PX ========== */
+    .agenda-wrapper, .widget-agenda, .box-agenda, #agenda, .card-agenda,
+    #gc-widget-wrap, #h4-Cert-DigitalElement {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .agenda-page {
       width: 100%;
       min-height: 100vh;
       padding: 20px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
+      background: #f0f0f0;
     }
 
-    .purchase-container {
-      width: 100%;
-      max-width: 1200px;
-      background: var(--surface, #ffffff);
-      border-radius: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
-      padding: 24px;
-      margin: 0 auto;
-      position: relative;
-    }
-
-    /* ========== HEADER COMPACTO ========== */
-    .purchase-header {
-      text-align: center;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .purchase-title {
-      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-      font-weight: 700;
-      color: #1a202c;
-      margin: 0 0 8px 0;
-    }
-
-    .purchase-subtitle {
-      font-size: clamp(0.875rem, 1.5vw, 1rem);
-      color: #64748b;
-      margin: 0;
-    }
-
-    /* ========== BOTÃO VOLTAR ========== */
-    .back-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      color: #374151;
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
-    .back-button:hover {
+    /* ========== CONTAINER RESPONSIVO ========== */
+    .agenda-test-container {
+      /* Desktop: 662x520 */
+      width: 662px;
+      height: 520px;
       background: #ffffff;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    /* ========== ÁREA DO WIDGET - SEM LIMITAÇÕES ========== */
-    .widget-area {
-      width: 100%;
-      min-height: 600px;
+      border: 2px solid #ff0000;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* ========== NORMALIZAÇÃO TOTAL DO WIDGET ========== */
+    /* Label do container para identificação */
+    .agenda-test-container::before {
+      content: "662px × 520px (Desktop)";
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background: #ff0000;
+      color: white;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: bold;
+      border-radius: 3px;
+      z-index: 1000;
+    }
+
+
+
+    /* ========== WIDGET LIMPO DENTRO DO CONTAINER ========== */
     #h4-Cert-DigitalElement {
       width: 100% !important;
-      max-width: none !important;
-      min-width: 0 !important;
-      height: auto !important;
-      min-height: 600px !important;
-      max-height: none !important;
+      height: 100% !important;
       margin: 0 !important;
       padding: 0 !important;
       border: none !important;
-      box-sizing: border-box !important;
-      overflow: visible !important;
-      position: relative !important;
-      display: block !important;
       background: transparent !important;
+      overflow: auto !important;
     }
 
-    /* TODOS OS ELEMENTOS FILHOS DO WIDGET */
-    #h4-Cert-DigitalElement *,
-    #h4-Cert-DigitalElement > div,
-    #h4-Cert-DigitalElement iframe,
-    #h4-Cert-DigitalElement .widget-container,
-    #h4-Cert-DigitalElement .calendar-container,
-    #h4-Cert-DigitalElement .calendar,
-    #h4-Cert-DigitalElement .agenda,
-    #h4-Cert-DigitalElement .booking-form,
-    #h4-Cert-DigitalElement table,
-    #h4-Cert-DigitalElement .calendar-grid,
-    #h4-Cert-DigitalElement .date-picker,
-    #h4-Cert-DigitalElement .time-slots {
-      width: 100% !important;
-      max-width: none !important;
-      min-width: 0 !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      border: none !important;
-      box-sizing: border-box !important;
-      overflow: visible !important;
-      position: relative !important;
-    }
 
-    /* REMOVE LARGURAS FIXAS ESPECÍFICAS */
-    #h4-Cert-DigitalElement [style*="width: 800px"],
-    #h4-Cert-DigitalElement [style*="width: 900px"],
-    #h4-Cert-DigitalElement [style*="width: 1000px"],
-    #h4-Cert-DigitalElement [style*="width: 1200px"],
-    #h4-Cert-DigitalElement [style*="min-width: 800px"],
-    #h4-Cert-DigitalElement [style*="min-width: 900px"],
-    #h4-Cert-DigitalElement [style*="min-width: 1000px"] {
-      width: 100% !important;
-      min-width: 0 !important;
-      max-width: none !important;
-    }
 
-    /* FORÇA IFRAMES RESPONSIVOS */
-    #h4-Cert-DigitalElement iframe {
-      width: 100% !important;
-      height: auto !important;
-      min-height: 600px !important;
-      border: none !important;
-      border-radius: 12px !important;
-    }
-
-    /* REMOVE OVERFLOW RESTRITIVO */
-    #h4-Cert-DigitalElement,
-    #h4-Cert-DigitalElement * {
-      overflow-x: visible !important;
-      overflow-y: visible !important;
-    }
-
-    /* ========== MEDIA QUERIES ESPECÍFICAS ========== */
-    
-    /* 320px - Mobile Extra Pequeno */
-    @media (max-width: 320px) {
-      .purchase-page { padding: 12px; }
-      .purchase-container { padding: 16px; }
-      .back-button { position: static; margin-bottom: 16px; }
-      #h4-Cert-DigitalElement { min-height: 500px !important; }
-      #h4-Cert-DigitalElement iframe { min-height: 500px !important; }
-    }
-
-    /* 768px - Tablet */
+    /* ========== MOBILE: 310x500 ========== */
     @media (max-width: 768px) {
-      .purchase-page { padding: 16px; }
-      .purchase-container { padding: 20px; }
-      #h4-Cert-DigitalElement { min-height: 550px !important; }
-      #h4-Cert-DigitalElement iframe { min-height: 550px !important; }
+      .agenda-test-container {
+        width: 310px;
+        height: 500px;
+      }
+
+      .agenda-test-container::before {
+        content: "310px × 500px (Mobile)";
+      }
     }
 
-    /* 1024px - Desktop */
-    @media (min-width: 1024px) {
-      .purchase-page { padding: 24px; }
-      .purchase-container { padding: 32px; }
-      #h4-Cert-DigitalElement { min-height: 650px !important; }
-      #h4-Cert-DigitalElement iframe { min-height: 650px !important; }
+    /* ========== MOBILE PEQUENO: Responsivo dentro dos limites ========== */
+    @media (max-width: 320px) {
+      .agenda-test-container {
+        width: 95vw;
+        height: 90vh;
+        max-width: 310px;
+        max-height: 500px;
+      }
+
+      .agenda-test-container::before {
+        content: "310×500 (Adaptado)";
+      }
     }
 
-    /* 1440px - Desktop Grande */
-    @media (min-width: 1440px) {
-      .purchase-container { max-width: 1400px; padding: 40px; }
-      #h4-Cert-DigitalElement { min-height: 700px !important; }
-      #h4-Cert-DigitalElement iframe { min-height: 700px !important; }
-    }
 
-    /* ========== PLACEHOLDER ========== */
-    .purchase-placeholder {
-      text-align: center;
-      color: #64748b;
-      padding: 40px 20px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 1;
-    }
 
-    .purchase-placeholder-icon {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto 16px;
-      opacity: 0.6;
-    }
 
-    .purchase-placeholder.hidden {
-      display: none;
-    }
-
-    /* ========== ANIMAÇÃO ========== */
-    .purchase-container {
-      animation: slideIn 0.6s ease-out;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
   </style>
 </head>
-<body class="purchase-page">
+<body class="agenda-page">
 
-  <div class="purchase-container">
-    <!-- Botão voltar -->
-    <a href="/" class="back-button">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="m12 19-7-7 7-7"/>
-        <path d="m19 12H5"/>
-      </svg>
-      Voltar
-    </a>
-
-    <!-- Header -->
-    <header class="purchase-header">
-      <h1 class="purchase-title">Finalizar Compra</h1>
-      <p class="purchase-subtitle">Certificado Digital e-CNPJ A1 - R$ 109,00</p>
-    </header>
-
-    <!-- Área do Widget -->
-    <div class="widget-area">
-      <!-- Widget do Certificado Digital -->
-      <div id="h4-Cert-DigitalElement"
-           cert-token="T-5a6f94"
-           cert-company="C-8a0368"
-           accountant="A-689eb3"
-           f="F-2"
-           p="P-2ee4">
-      </div>
-
-      <!-- Placeholder -->
-      <div class="purchase-placeholder" id="widget-placeholder">
-        <div class="purchase-placeholder-icon">
-          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="8" y="12" width="48" height="36" rx="4" stroke="currentColor" stroke-width="2"/>
-            <path d="M16 20h32M16 28h24M16 36h16" stroke="currentColor" stroke-width="2"/>
-            <circle cx="44" cy="32" r="6" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        </div>
-        <div class="purchase-placeholder-text">Carregando Sistema de Agendamento...</div>
-        <div class="purchase-placeholder-desc">
-          Aguarde enquanto carregamos o sistema de agenda online
-        </div>
-      </div>
+  <!-- Container de Teste 662x510 -->
+  <div class="agenda-test-container">
+    <!-- Widget do Certificado Digital -->
+    <div id="h4-Cert-DigitalElement"
+         cert-token="T-5a6f94"
+         cert-company="C-8a0368"
+         accountant="A-689eb3"
+         f="F-2"
+         p="P-2ee4">
     </div>
   </div>
 
-  <!-- Script do Widget -->
+  <!-- Script do widget (depois dos CSS) -->
   <script type="text/javascript" src="https://s3.amazonaws.com/widget-certificado-digital/widget_certificadoDigital.js"></script>
 
-  <!-- JavaScript de Controle e Auto-ajuste -->
+  <!-- JavaScript para auto-altura do iframe -->
+  <script>
+    (function(){
+      var f = document.getElementById('agendaFrame');
+      if (f) {
+        // 1) Tenta ouvir mensagens do widget
+        window.addEventListener('message', function(e){
+          try {
+            if (typeof e.data === 'object' && e.data && e.data.type === 'setHeight') {
+              f.style.height = e.data.value + 'px';
+            }
+          } catch(_) {}
+        });
+
+        // 2) Fallback: reajusta altura pelo conteúdo
+        try {
+          var ro = new ResizeObserver(function(){
+            if (f && f.contentWindow && f.contentDocument && f.contentDocument.body) {
+              f.style.height = f.contentDocument.body.scrollHeight + 'px';
+            }
+          });
+          ro.observe(f);
+        } catch(_) {} // cross-domain ignora
+      }
+    })();
+  </script>
+
+  <!-- JavaScript Simples -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const widgetElement = document.getElementById('h4-Cert-DigitalElement');
-      const placeholder = document.getElementById('widget-placeholder');
-      const widgetArea = document.querySelector('.widget-area');
+      const isMobile = window.innerWidth <= 768;
+      const dimensions = isMobile ? '310x500px' : '662x520px';
+      console.log(`Container ${dimensions} pronto para agenda`);
 
-      // ========== AUTO-AJUSTE DE ALTURA ========== //
-      function adjustWidgetHeight() {
-        if (widgetElement && widgetElement.scrollHeight > 0) {
-          const scrollHeight = widgetElement.scrollHeight;
-          const minHeight = window.innerWidth <= 768 ? 550 : 650;
-          const finalHeight = Math.max(scrollHeight + 50, minHeight);
-
-          widgetArea.style.minHeight = finalHeight + 'px';
-          widgetElement.style.minHeight = finalHeight + 'px';
-
-          // Ajusta iframes se existirem
-          const iframes = widgetElement.querySelectorAll('iframe');
-          iframes.forEach(iframe => {
-            iframe.style.height = finalHeight + 'px';
-            iframe.style.minHeight = finalHeight + 'px';
-          });
-        }
+      // Log das dimensões atuais para debug
+      const container = document.querySelector('.agenda-test-container');
+      if (container) {
+        const rect = container.getBoundingClientRect();
+        console.log(`Dimensões reais: ${Math.round(rect.width)}x${Math.round(rect.height)}px`);
       }
-
-      // ========== OBSERVADORES ========== //
-
-      // ResizeObserver para monitorar mudanças de tamanho
-      if (window.ResizeObserver) {
-        const resizeObserver = new ResizeObserver(entries => {
-          for (let entry of entries) {
-            adjustWidgetHeight();
-          }
-        });
-        resizeObserver.observe(widgetElement);
-      }
-
-      // MutationObserver para monitorar mudanças no DOM
-      const mutationObserver = new MutationObserver(mutations => {
-        let shouldAdjust = false;
-        mutations.forEach(mutation => {
-          if (mutation.type === 'childList' || mutation.type === 'attributes') {
-            shouldAdjust = true;
-          }
-        });
-        if (shouldAdjust) {
-          setTimeout(adjustWidgetHeight, 100);
-        }
-      });
-
-      mutationObserver.observe(widgetElement, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['style', 'class']
-      });
-
-      // ========== DETECÇÃO DE CARREGAMENTO ========== //
-      function checkWidgetLoaded() {
-        if (widgetElement && (widgetElement.children.length > 0 || widgetElement.innerHTML.trim() !== '')) {
-          placeholder.classList.add('hidden');
-          adjustWidgetHeight();
-
-          // Força aplicação dos estilos após carregamento
-          setTimeout(() => {
-            const allElements = widgetElement.querySelectorAll('*');
-            allElements.forEach(el => {
-              if (el.style.width && (el.style.width.includes('800px') || el.style.width.includes('900px'))) {
-                el.style.width = '100%';
-                el.style.maxWidth = 'none';
-                el.style.minWidth = '0';
-              }
-            });
-            adjustWidgetHeight();
-          }, 1000);
-
-          return true;
-        }
-        return false;
-      }
-
-      // ========== REAJUSTE NO RESIZE ========== //
-      window.addEventListener('resize', function() {
-        setTimeout(adjustWidgetHeight, 100);
-      });
-
-      // ========== INICIALIZAÇÃO ========== //
-
-      // Verifica carregamento a cada 500ms
-      const checkInterval = setInterval(() => {
-        if (checkWidgetLoaded()) {
-          clearInterval(checkInterval);
-        }
-      }, 500);
-
-      // Fallback após 15 segundos
-      setTimeout(() => {
-        clearInterval(checkInterval);
-        if (!placeholder.classList.contains('hidden')) {
-          placeholder.innerHTML = `
-            <div class="purchase-placeholder-text">Erro ao carregar sistema</div>
-            <div class="purchase-placeholder-desc">
-              Entre em contato conosco pelo WhatsApp:<br>
-              <a href="https://wa.me/551940422204" target="_blank" style="color: #1F6FFF; text-decoration: none;">
-                (19) 4042-2204
-              </a>
-            </div>
-          `;
-        }
-      }, 15000);
-
-      // Ajuste inicial
-      setTimeout(adjustWidgetHeight, 2000);
     });
   </script>
 
