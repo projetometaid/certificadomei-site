@@ -1,0 +1,4 @@
+# Redirecionamentos 301 para URLs canônicas
+/compra.html /compra 301
+/www/compra.html /compra 301
+/www/compra /compra 301
