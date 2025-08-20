@@ -2,3 +2,9 @@
 /compra.html /compra 301
 /www/compra.html /compra 301
 /www/compra /compra 301
+
+# Redirecionamento para política de cookies (caso necessário)
+/politica-de-cookies.html /politica-de-cookies 301
+
+# Redirecionamento para blog (caso necessário)
+/blog.html /blog 301

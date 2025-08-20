@@ -30,6 +30,16 @@ function handler(event) {
     if (uri === '/compra') {
         request.uri = '/compra.html';
     }
-    
+
+    // Rewrite: /politica-de-cookies -> /politica-de-cookies.html (interno, sem redirecionamento)
+    if (uri === '/politica-de-cookies') {
+        request.uri = '/politica-de-cookies.html';
+    }
+
+    // Rewrite: /blog -> /blog.html (interno, sem redirecionamento)
+    if (uri === '/blog') {
+        request.uri = '/blog.html';
+    }
+
     return request;
 }

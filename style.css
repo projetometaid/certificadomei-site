@@ -179,6 +179,7 @@ section + .kpis-section {
   transition: box-shadow var(--transition-base) ease;
   padding-top: env(safe-area-inset-top);
   width: 100%;
+  overflow: hidden; /* Proteção contra bleed de pseudo-elementos */
 }
 
 .topbar.shrink {
@@ -1915,10 +1916,11 @@ section, .card, .box {
     font-weight: 600;
     font-size: 15px;
     border-radius: 0 !important;
-    position: relative;
+    position: relative; /* Garante que o link seja o contêiner de posicionamento */
     width: auto !important;
     box-sizing: content-box !important;
   }
+
   .nav a:hover,
   .nav a:focus {
     background: transparent;
@@ -1926,15 +1928,23 @@ section, .card, .box {
     color: var(--brand);
     transform: none;
   }
-  .nav a:hover::after {
+
+  /* Barrinha de hover ancorada dentro do link (sem overflow) */
+  .nav a::after {
     content: '';
     position: absolute;
-    bottom: -2px;
     left: 0;
     right: 0;
+    bottom: 0;           /* <- dentro do link, não -2px */
     height: 2px;
     background: var(--brand);
-    border-radius: 1px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+  }
+
+  .nav a:hover::after {
+    transform: scaleX(1);
   }
   /* ========== DESKTOP: Layout lado a lado otimizado ========== */
 

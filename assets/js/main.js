@@ -113,34 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // ========== SMOOTH SCROLL PARA LINKS INTERNOS ==========
-  
-  function initSmoothScroll() {
-    const internalLinks = document.querySelectorAll('a[href^="#"]');
-    
-    if (internalLinks.length > 0) {
-      internalLinks.forEach(function(link) {
-        link.addEventListener('click', function(e) {
-          const targetId = this.getAttribute('href');
-          if (targetId === '#') return;
-          
-          const targetElement = document.querySelector(targetId);
-          if (targetElement) {
-            e.preventDefault();
-            try {
-              targetElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-              });
-            } catch (error) {
-              // Fallback para navegadores que não suportam smooth scroll
-              targetElement.scrollIntoView();
-            }
-          }
-        });
-      });
-    }
-  }
+  // ========== SMOOTH SCROLL REMOVIDO ==========
+  // Função removida para simplificar navegação - apenas link para /blog
 
   // ========== LAZY LOADING PARA IMAGENS ==========
   
@@ -263,7 +237,6 @@ document.addEventListener('DOMContentLoaded', function() {
       initMobileMenu();
       initHeaderShrink();
       initReducedMotion();
-      initSmoothScroll();
       initLazyLoading();
       initFormValidation();
       initFAQ();

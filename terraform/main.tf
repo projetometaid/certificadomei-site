@@ -145,6 +145,15 @@ resource "aws_s3_bucket_policy" "website" {
   })
 }
 
+# ===== CLOUDFRONT FUNCTION =====
+resource "aws_cloudfront_function" "url_rewrite" {
+  name    = "${var.project_name}-${var.environment}-url-rewrite"
+  runtime = "cloudfront-js-1.0"
+  comment = "URL rewrite function for clean URLs and 403 fix"
+  publish = true
+  code    = file("${path.module}/../cloudfront-function.js")
+}
+
 # ===== CLOUDFRONT DISTRIBUTION =====
 resource "aws_cloudfront_origin_access_control" "website" {
   name                              = "${var.project_name}-${var.environment}-oac"
@@ -279,6 +288,12 @@ resource "aws_cloudfront_distribution" "website" {
     # Usar policies otimizadas em vez de forwarded_values (deprecated)
     cache_policy_id          = aws_cloudfront_cache_policy.optimized_caching.id
     response_headers_policy_id = aws_cloudfront_response_headers_policy.performance_headers.id
+
+    # CloudFront Function para URL rewrite
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.url_rewrite.arn
+    }
 
     # Otimizações de performance
     smooth_streaming = false
