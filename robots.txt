@@ -4,17 +4,12 @@ Allow: /
 # Sitemap
 Sitemap: https://www.certificadodigitalmei.com.br/sitemap.xml
 
-# Bloquear arquivos desnecessários para SEO
-Disallow: /assets/js/
+# Bloquear apenas arquivos administrativos e documentação
 Disallow: /terraform/
 Disallow: /md_google/
-Disallow: /*.css$
-Disallow: /*.js$
+Disallow: /*.md$
 
-# Permitir recursos importantes
-Allow: /assets/images/
-Allow: /assets/favicons/
-Allow: /assets/logos/
-
-# Crawl-delay para ser gentil com o servidor
-Crawl-delay: 1
+# Permitir todos os recursos para render completo
+Allow: /assets/
+Allow: /*.css$
+Allow: /*.js$
