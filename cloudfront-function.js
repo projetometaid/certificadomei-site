@@ -1,7 +1,20 @@
 function handler(event) {
     var request = event.request;
     var uri = request.uri;
-    
+    var host = request.headers.host.value;
+
+    // Redirecionamento 301: domínio sem www -> com www (SEO canonical)
+    if (host === 'certificadodigitalmei.com.br') {
+        var response = {
+            statusCode: 301,
+            statusDescription: 'Moved Permanently',
+            headers: {
+                'location': { value: 'https://www.certificadodigitalmei.com.br' + uri }
+            }
+        };
+        return response;
+    }
+
     // Redirecionamento 301: /compra.html -> /compra
     if (uri === '/compra.html') {
         var response = {
